@@ -2,6 +2,7 @@
 
 //T200 thruster_R(5);
 T200 thruster_L(6);
+T200 thruster_R(5);
 
 
 void setup() {
@@ -11,7 +12,7 @@ void setup() {
     }
     Serial.setTimeout(10);
 
-    //thruster_R.setup();
+    thruster_R.setup();
     thruster_L.setup();
 
     Serial.println("READY");
@@ -19,6 +20,11 @@ void setup() {
 
 
 void loop() {
+
+    thruster_R.speed(1500);
+    thruster_R.run(5);
+    thruster_L.speed(1500);
+    thruster_L.run(5);
     
     //thruster_R.increase_astern();
     //thruster_L.speed(1800);

@@ -9,6 +9,7 @@ T200::T200(int Thruster_Pin) {
 T200::setup(void) {
     Thruster.attach(pin);
     Thruster.writeMicroseconds(pulse[1]);
+    delay(1000);
 }
 
 

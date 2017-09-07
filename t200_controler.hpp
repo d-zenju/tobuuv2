@@ -21,20 +21,20 @@ private:
     // FPS
     int oldtime = millis();
     int fps_flag = 0;
-    frame_rate(int fps);
+    void frame_rate(int fps);
 
 public:
     T200(int Thruster_Pin);
-    setup(void);
-    set_pulse(int mimimun, int midship, int maximum);
-    midship(void);
-    full_ahead(void);
-    full_astern(void);
-    increase_ahead(int accelerate = 1);
-    increase_astern(int accelerate = 1);
-    speed(int microseconds);
-    run(int fps);
-    state(void);
+    void setup(void);
+    void set_pulse(int mimimun, int midship, int maximum);
+    void midship(void);
+    void full_ahead(void);
+    void full_astern(void);
+    void increase_ahead(int accelerate = 1);
+    void increase_astern(int accelerate = 1);
+    void speed(int microseconds);
+    void run(int fps);
+    void state(void);
 };
 
 #endif

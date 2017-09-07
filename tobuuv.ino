@@ -1,16 +1,29 @@
 #include "t200_controler.hpp"
+#include "mpu9250.hpp"
 #include <WString.h>
 
-//T200 thruster_R(5);
+
+// THRUSTER
 T200 thruster_L(6);
 T200 thruster_R(5);
-
-String str;
 int r_pulse;
 int l_pulse;
 
 
-void setup() {
+// MPU9250
+MPU9250 imu;
+
+
+String str;
+int start;
+
+double accel[3] = {0.0, 0.0, 0.0};
+double gyro[3] = {0.0, 0.0, 0.0};
+double magnet[3] = {0.0, 0.0, 0.0};
+double temp = 0.0;
+
+
+void setup() {/******* ADDRESS ********/
     Serial.begin(38400);
     while (!Serial) {
         ;   // wait for serial port to connect.  Needed for native USB port only
@@ -23,40 +36,64 @@ void setup() {
     thruster_R.setup();
     thruster_L.setup();
 
+    // setup MPU9250
+    imu.init();
+
+    start = millis();
+
     Serial.println("READY");
 }
 
 
 void loop() {
 
-    if (Serial.available() > 3) {
+    if (Serial.available() > 0) {
         str = Serial.readString();
-        str = str.substring(3);
         r_pulse = str.substring(0, 4).toInt();
         l_pulse = str.substring(4, 8).toInt();
+    } else {    // DON'T receive serial signal -> Midship
+        int sub_time = millis() - start;
+        if (sub_time > 5000) {
+            r_pulse = 1500;
+            l_pulse = 1500;
+        }
     }
 
+    // thruster control
     thruster_R.speed(r_pulse);
     thruster_L.speed(l_pulse);
     thruster_R.run(5);
     thruster_L.run(5);
-    
-    //thruster_R.speed(1500);
-    //thruster_R.run(5);
-    //thruster_L.speed(1500);
-    //thruster_L.run(5);
-    
-    //thruster_R.increase_astern();
-    //thruster_L.speed(1800);
-    //thruster_R.run(5);
-    //thruster_L.run(5);
-    /*
-    String str = "";
-    if (Serial.available() > 0) {
-        str = Serial.readStringUntil('\n');
+
+    // print sensor
+    imu.getSensor();
+    imu.calcSensor();
+    imu.calcYPR();
+    printSensor();
+}
+
+
+void printSensor() {
+    // Accel
+    for (int i = 0; i < 3; i++) {
+        Serial.print(imu.accel[i]);
+        Serial.print(',');
     }
-    int comma = str.indexOf(',', 2);
-    for (int )
-    delay(100);
-    */
+    // Gyro
+    for (int i = 0; i < 3; i++) {
+        Serial.print(imu.gyro[i]);
+        Serial.print(',');
+    }
+    // Magnet
+    for (int i = 0; i < 3; i++) {
+        Serial.print(imu.magnet[i]);
+        Serial.print(',');
+    }
+    // Yaw, Pitch, Roll
+    for (int i = 0; i < 3; i++) {
+        Serial.print(imu.ypr[i]);
+        Serial.print(',');
+    }
+    // Temp
+    Serial.println(imu.temp);
 }

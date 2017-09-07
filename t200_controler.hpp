@@ -26,6 +26,7 @@ private:
 public:
     T200(int Thruster_Pin);
     setup(void);
+    set_pulse(int mimimun, int midship, int maximum);
     midship(void);
     full_ahead(void);
     full_astern(void);

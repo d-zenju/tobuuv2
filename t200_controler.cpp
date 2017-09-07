@@ -13,6 +13,13 @@ T200::setup(void) {
 }
 
 
+T200::set_pulse(int mimimun, int midship, int maximum) {
+    pulse[0] = mimimun;
+    pulse[1] = midship;
+    pulse[2] = maximum;
+}
+
+
 T200::midship(void) {
     pulse_state = pulse[1];
 }

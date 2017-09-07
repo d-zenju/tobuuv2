@@ -1,6 +1,6 @@
 #include "t200_controler.hpp"
 #include "mpu9250.hpp"
-#include <WString.h>
+#include <String.h>
 
 
 // THRUSTER

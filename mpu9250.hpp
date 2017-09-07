@@ -80,6 +80,13 @@ private:
     double _accel_scale;
     double _mag_scale;
 
+    // Calibration Magnet(min, max)
+    double min_max_magnet[3][2] = {
+        {-999999, -999999},
+        {-999999, -999999},
+        {-999999, -999999}
+    };
+
     // read register (Accel, Gyro, Magnet)
     uint8_t readRegister(const uint8_t register_addr);
     uint8_t readMagRegister(const uint8_t register_addr);
@@ -113,6 +120,7 @@ public:
     double readTemp();  // read temp data
     double readGyro(int i);    // raed gyro data[0:x, 1:y, 2:z]
     double readMagnet(int i);    // raed magnet data[0:x, 1:y, 2:z]
+    void calibrateMagnet(void); // calibrate magnet sensor
 };
 
 

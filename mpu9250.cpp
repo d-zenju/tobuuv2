@@ -198,3 +198,19 @@ double MPU9250::readGyro(int i) {
 double MPU9250::readMagnet(int i) {
     return magnet[i];
 }
+
+
+void MPU9250::calibrateMagnet(void) {
+    getSensor();
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 2; j++) {
+            if (min_max_magnet[i][j] == -999999)
+                min_max_magnet[i][j] = magnet[i];
+            else if (min_max_magnet[i][0] > magnet[i])
+                min_max_magnet[i][0] = magnet[i];
+            else if (min_max_magnet[i][1] < magnet[i])
+                min_max_magnet[i][1] = magnet[i];
+        }
+        offset_magnet[i] = min_max_magnet[i][0] + (min_max_magnet[i][1] - min_max_magnet[i][0]) / 2.0;
+    }
+}

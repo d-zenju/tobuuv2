@@ -16,28 +16,24 @@ class SerialThread():
     def __init__(self):
         self.stop_event = threading.Event()
         self.message = ''
+    
+        # Serial Open(PORT, BAUDRATE)
+        self.ser = serial.Serial('/dev/tty.usbserial-000013FA', 115200)
+        # Xbee set Bypass mode
+        self.ser.write('b')
 
-        # SERIAL(MAC ONLY)
-        self.ser = serial.Serial()   # serial init
-        self.ser.baudrate = 38400    # baud rate
-        self.ser.timeout = 0.5       # timeout
-        for self.file in os.listdir('/dev'):
-            if "tty.usbmodem" in self.file:
-                self.ser.port = '/dev/' + self.file
-                self.ser.open()
-        
         self.t_read = threading.Thread(target = self.read)
         self.t_read.start()
 
     def stop(self):
-        self.write('15001500')
+        self.ser.write('15001500')
         self.stop_event.set()
-        self.t_read.join()
+        self.t_read.stop()
         self.ser.close()
 
     def read(self):
         while not self.stop_event.is_set():
-            self.message = self.ser.readline()
+            self.message = self.ser.read()
             print self.message
     
     def write(self, message):

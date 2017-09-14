@@ -24,7 +24,7 @@ double temp = 0.0;
 
 
 void setup() {/******* ADDRESS ********/
-    Serial.begin(38400);
+    Serial.begin(115200);
     while (!Serial) {
         ;   // wait for serial port to connect.  Needed for native USB port only
     }

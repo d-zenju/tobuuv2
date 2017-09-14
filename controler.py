@@ -18,7 +18,8 @@ class SerialThread():
         self.message = ''
     
         # Serial Open(PORT, BAUDRATE)
-        self.ser = serial.Serial('/dev/tty.usbserial-000013FA', 115200)
+        self.ser = serial.Serial('/dev/tty.usbserial-AL01T40X', 115200)
+        #self.ser = serial.Serial('/dev/tty.usbserial-000013FA', 115200)
         # Xbee set Bypass mode
         self.ser.write('b')
 
@@ -33,11 +34,11 @@ class SerialThread():
 
     def read(self):
         while not self.stop_event.is_set():
-            self.message = self.ser.read()
+            self.message = self.ser.readline()
             print self.message
     
     def write(self, message):
-        self.ser.write(message)
+        self.ser.write(message + ';')
 
     def read_message(self):
         return self.message

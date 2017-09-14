@@ -23,13 +23,7 @@ double magnet[3] = {0.0, 0.0, 0.0};
 double temp = 0.0;
 
 
-void setup() {/******* ADDRESS ********/
-    Serial.begin(115200);
-    while (!Serial) {
-        ;   // wait for serial port to connect.  Needed for native USB port only
-    }
-    Serial.setTimeout(10);
-
+void setup() {/******* ADDRESS ********/    
     // setup thruster
     thruster_R.set_pulse(1180, 1500, 1820);
     thruster_L.set_pulse(1180, 1500, 1820);
@@ -37,20 +31,23 @@ void setup() {/******* ADDRESS ********/
     thruster_L.setup();
 
     // setup MPU9250
-    imu.init();
+    //imu.init();
+
+    Serial.begin(115200);
+    Serial.setTimeout(10);
+    Serial.write('b');
 
     start = millis();
-
-    Serial.println("READY");
 }
 
 
 void loop() {
-
     if (Serial.available() > 0) {
-        str = Serial.readString();
+        str = Serial.readStringUntil(';');
         r_pulse = str.substring(0, 4).toInt();
         l_pulse = str.substring(4, 8).toInt();
+        Serial.print("r:"); Serial.print(r_pulse);
+        Serial.print("l:"); Serial.println(l_pulse);
     } else {    // DON'T receive serial signal -> Midship
         int sub_time = millis() - start;
         if (sub_time > 5000) {
@@ -65,11 +62,13 @@ void loop() {
     thruster_R.run(5);
     thruster_L.run(5);
 
+    /*
     // print sensor
     imu.getSensor();
     imu.calcSensor();
     imu.calcYPR();
     printSensor();
+    */
 }
 
 
